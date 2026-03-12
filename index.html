@@ -5,8 +5,6 @@
 <title>For You</title>
 
 <style>
-
-/* ==== STYLES REMAIN UNCHANGED ==== */
 html,body{margin:0;padding:0;width:100%;height:100%;font-family:Poppins,sans-serif;background:#050512;color:white;overflow:hidden;cursor:none;}
 #giftScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:#050512;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;}
 .giftBox{font-size:90px;cursor:pointer;animation:giftFloat 2s infinite ease-in-out;}
@@ -36,8 +34,8 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 .slide img{width:100%;border-radius:15px;box-shadow:0 0 25px rgba(255,120,200,0.5);}
 .slide.active{opacity:1;position:relative;}
 .controls{margin-top:15px;display:flex;gap:20px;}
+.controls button{font-size:20px;font-weight:bold;}
 .letter{max-width:600px;line-height:1.8;white-space:pre-line;font-size:18px;}
-
 </style>
 </head>
 <body>
@@ -54,61 +52,62 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 
 <!-- GIFT INTRO -->
 <div id="giftScreen">
-<div class="giftBox" onclick="openGift()">🎁</div>
-<p class="giftText">Tap to open your birthday surprise</p>
+  <div class="giftBox" onclick="openGift()">🎁</div>
+  <p class="giftText">Tap to open your birthday surprise</p>
 </div>
 
 <div id="stars"></div>
 <div class="cursor" id="cursor"></div>
 
 <div class="page active" id="page1">
-<h1>Before you open this…</h1>
-<p>Do you love this idiot of yours?</p>
-<input id="answer" placeholder="Type your answer">
-<button onclick="checkAnswer()">Unlock</button>
-<p id="response"></p>
+  <h1>Before you open this…</h1>
+  <p>Do you love this idiot of yours?</p>
+  <input id="answer" placeholder="Type your answer">
+  <button onclick="checkAnswer()">Unlock</button>
+  <p id="response"></p>
 </div>
 
 <div class="page" id="page2">
-<h1>This idiot loves you more ❤️</h1>
-<button onclick="nextPage(); startMusicAndFire();">Open your surprise</button>
+  <h1>This idiot loves you more ❤️</h1>
+  <button onclick="nextPage(); startMusicAndFire();">Show Surprise</button>
 </div>
 
 <div class="page" id="page3">
-<h1>May god always keep this cute little baccha of mine safe</h1>
+  <h1>May god always keep this cute little baccha of mine safe</h1>
 
-<div class="slideshow">
-<div class="slide active"><img src="photo1.jpg"></div>
-<div class="slide"><img src="photo2.jpg"></div>
-<div class="slide"><img src="photo3.jpg"></div>
-<div class="slide"><img src="photo4.jpg"></div>
-<div class="slide"><img src="photo5.jpg"></div>
-<div class="slide"><img src="photo6.jpg"></div>
-</div>
+  <div class="slideshow">
+    <div class="slide active"><img src="photo1.jpg"></div>
+    <div class="slide"><img src="photo2.jpg"></div>
+    <div class="slide"><img src="photo3.jpg"></div>
+    <div class="slide"><img src="photo4.jpg"></div>
+    <div class="slide"><img src="photo5.jpg"></div>
+    <div class="slide"><img src="photo6.jpg"></div>
+  </div>
 
-<div class="controls">
-<button onclick="prevSlide()"><</button>
-<button onclick="nextSlide()">></button>
-</div>
+  <div class="controls">
+    <button onclick="prevSlide()">&lt;</button>
+    <button onclick="nextSlide()">&gt;</button>
+  </div>
 
-<button onclick="nextPage()">Next</button>
+  <button onclick="nextPage()">Next</button>
 </div>
 
 <div class="page" id="page4">
-<h1>For My Love</h1>
-<p class="letter" id="letter"></p>
-<button onclick="nextPage()">Next</button>
+  <h1>For My Love</h1>
+  <p class="letter" id="letter"></p>
+  <button onclick="nextPage()">Next</button>
 </div>
 
 <div class="page" id="page5">
-<h1>Happy Birthday To The Most Special Person In My Life❤️</h1>
-<p>Thank you for making me happy in ways I never imagined and making my life special.</p>
+  <h1>Happy Birthday To The Most Special Person In My Life❤️</h1>
+  <p>Thank you for making me happy in ways I never imagined and making my life special.</p>
 </div>
 
 <script>
+let bgMusic=document.getElementById("bgMusic");
+let fireSound=document.getElementById("fireSound");
 
 // ==== MUSIC & FIRE ====
-// Only start after user clicks the second page button
 function startMusicAndFire(){
   bgMusic.play().catch(()=>console.log("Music blocked"));
   fireSound.play().catch(()=>console.log("Fire sound blocked"));
@@ -124,11 +123,12 @@ let pages=document.querySelectorAll(".page");
 let currentPage=0;
 
 function nextPage(){
-pages[currentPage].classList.remove("active");
-currentPage++;
-pages[currentPage].classList.add("active");
+  pages[currentPage].classList.remove("active");
+  currentPage++;
+  if(currentPage<pages.length) pages[currentPage].classList.add("active");
 }
 
+// ==== ANSWER CHECK ====
 function checkAnswer(){
 let input=document.getElementById("answer").value.toLowerCase();
 let response=document.getElementById("response");
@@ -152,63 +152,64 @@ pages[1].classList.add("active");
 },2000);
 spawnHearts();
 }
-}
 
 // ==== SLIDESHOW ====
 let slideIndex=0;
 let slides=document.querySelectorAll(".slide");
 
 function showSlide(i){
-slides.forEach(s=>s.classList.remove("active"));
-slides[i].classList.add("active");
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[i].classList.add("active");
 }
 
 function nextSlide(){
-slideIndex=(slideIndex+1)%slides.length;
-showSlide(slideIndex);
+  slideIndex=(slideIndex+1)%slides.length;
+  showSlide(slideIndex);
 }
 
 function prevSlide(){
-slideIndex=(slideIndex-1+slides.length)%slides.length;
-showSlide(slideIndex);
+  slideIndex=(slideIndex-1+slides.length)%slides.length;
+  showSlide(slideIndex);
 }
 
 // ==== HEARTS ====
 function spawnHearts(){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="💖";
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=6+Math.random()*4+"s";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),8000);
+  let heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="💖";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=6+Math.random()*4+"s";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),8000);
 }
-
 setInterval(()=>{if(currentPage!==2){spawnHearts()}},1500);
 
 // ==== CURSOR ====
 let cursor=document.getElementById("cursor");
-document.addEventListener("mousemove",e=>{cursor.style.left=e.clientX+"px"; cursor.style.top=e.clientY+"px";});
+document.addEventListener("mousemove",e=>{
+  cursor.style.left=e.clientX+"px"; 
+  cursor.style.top=e.clientY+"px";
+});
 
 // ==== STARS ====
 let stars=document.getElementById("stars");
 for(let i=0;i<350;i++){
-let star=document.createElement("div");
-star.className="star";
-star.style.left=Math.random()*100+"vw";
-star.style.top=Math.random()*100+"vh";
-star.style.animationDelay=Math.random()*5+"s";
-stars.appendChild(star);
+  let star=document.createElement("div");
+  star.className="star";
+  star.style.left=Math.random()*100+"vw";
+  star.style.top=Math.random()*100+"vh";
+  star.style.animationDelay=Math.random()*5+"s";
+  stars.appendChild(star);
 }
 
 // ==== SHOOTING STARS ====
 setInterval(()=>{
-let star=document.createElement("div");
-star.className="shooting";
-star.style.left=Math.random()*100+"%";
-star.style.top=Math.random()*20+"%";
-stars.appendChild(star);
-setTimeout(()=>star.remove(),5000);
+  let star=document.createElement("div");
+  star.className="shooting";
+  star.style.left=Math.random()*100+"%";
+  star.style.top=Math.random()*20+"%";
+  stars.appendChild(star);
+  setTimeout(()=>star.remove(),5000);
 },7000);
 
 // ==== LETTER TYPE ====
@@ -221,7 +222,6 @@ i++;
 setTimeout(typeLetter,40);
 }}
 typeLetter();
-
 </script>
 </body>
 </html>
