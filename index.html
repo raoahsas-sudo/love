@@ -40,17 +40,16 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 </head>
 <body>
 
-<!-- BACKGROUND MUSIC -->
+<!-- MUSIC -->
 <audio id="bgMusic" loop>
 <source src="your-song.mp3" type="audio/mp3">
 </audio>
-
-<!-- FIRECRACKER SOUND -->
+<!-- FIRE -->
 <audio id="fireSound" loop>
 <source src="firecracker.mp3" type="audio/mp3">
 </audio>
 
-<!-- GIFT INTRO -->
+<!-- GIFT -->
 <div id="giftScreen">
   <div class="giftBox" onclick="openGift()">🎁</div>
   <p class="giftText">Tap to open your birthday surprise</p>
@@ -69,7 +68,7 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 
 <div class="page" id="page2">
   <h1>This idiot loves you more ❤️</h1>
-  <button onclick="nextPage(); startMusicAndFire(); startSlideshowAuto();">Show Surprise</button>
+  <button onclick="showSurprise()">Show Surprise</button>
 </div>
 
 <div class="page" id="page3">
@@ -106,6 +105,57 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 <script>
 let bgMusic=document.getElementById("bgMusic");
 let fireSound=document.getElementById("fireSound");
+let pages=document.querySelectorAll(".page");
+let currentPage=0;
+let slideIndex=0;
+let slides=document.querySelectorAll(".slide");
+let slideshowInterval;
+
+// ==== GIFT ====
+function openGift(){
+  document.querySelector(".giftBox").classList.add("giftOpen");
+  setTimeout(()=>{
+    document.getElementById("giftScreen").style.display="none";
+    nextPage(); // show first page after gift
+  },600);
+}
+
+// ==== NEXT PAGE ====
+function nextPage(){
+  pages[currentPage].classList.remove("active");
+  currentPage++;
+  if(currentPage<pages.length) pages[currentPage].classList.add("active");
+}
+
+// ==== CHECK ANSWER ====
+function checkAnswer(){
+  let input=document.getElementById("answer").value.toLowerCase();
+  let response=document.getElementById("response");
+  let page=document.getElementById("page1");
+  if(input==="no"){
+    page.classList.add("shake");
+    response.innerText="Try again.";
+    setTimeout(()=>page.classList.remove("shake"),400);
+  } else if(input==="yes"){
+    page.classList.add("shake");
+    response.innerText="This idiot wants the whole line not just a yes.";
+    setTimeout(()=>page.classList.remove("shake"),400);
+  } else{
+    response.innerText="This idiot loves you more ❤️";
+    setTimeout(()=>{
+      pages[0].classList.remove("active");
+      pages[1].classList.add("active");
+    },2000);
+    spawnHearts();
+  }
+}
+
+// ==== SHOW SURPRISE BUTTON ====
+function showSurprise(){
+  nextPage();
+  startMusicAndFire();
+  startSlideshowAuto();
+}
 
 // ==== MUSIC & FIRE ====
 function startMusicAndFire(){
@@ -113,70 +163,14 @@ function startMusicAndFire(){
   fireSound.play().catch(()=>console.log("Fire sound blocked"));
 }
 
-// ==== GIFT OPEN ====
-function openGift(){
-    document.querySelector(".giftBox").classList.add("giftOpen");
-    setTimeout(()=>{document.getElementById("giftScreen").style.display="none"},600)
-}
-
-let pages=document.querySelectorAll(".page");
-let currentPage=0;
-
-function nextPage(){
-  pages[currentPage].classList.remove("active");
-  currentPage++;
-  if(currentPage<pages.length) pages[currentPage].classList.add("active");
-}
-
-// ==== ANSWER CHECK ====
-function checkAnswer(){
-let input=document.getElementById("answer").value.toLowerCase();
-let response=document.getElementById("response");
-let page=document.getElementById("page1");
-
-if(input==="no"){
-page.classList.add("shake");
-response.innerText="Try again.";
-setTimeout(()=>page.classList.remove("shake"),400);
-}
-else if(input==="yes"){
-page.classList.add("shake");
-response.innerText="This idiot wants the whole line not just a yes.";
-setTimeout(()=>page.classList.remove("shake"),400);
-}
-else{
-response.innerText="This idiot loves you more ❤️";
-setTimeout(()=>{
-pages[0].classList.remove("active");
-pages[1].classList.add("active");
-},2000);
-spawnHearts();
-}
-
 // ==== SLIDESHOW ====
-let slideIndex=0;
-let slides=document.querySelectorAll(".slide");
-let slideshowInterval;
-
 function showSlide(i){
   slides.forEach(s=>s.classList.remove("active"));
   slides[i].classList.add("active");
 }
-
-function nextSlide(){
-  slideIndex=(slideIndex+1)%slides.length;
-  showSlide(slideIndex);
-}
-
-function prevSlide(){
-  slideIndex=(slideIndex-1+slides.length)%slides.length;
-  showSlide(slideIndex);
-}
-
-// Auto-play slideshow
-function startSlideshowAuto(){
-  slideshowInterval = setInterval(nextSlide,5000); // change slide every 5 sec
-}
+function nextSlide(){slideIndex=(slideIndex+1)%slides.length; showSlide(slideIndex);}
+function prevSlide(){slideIndex=(slideIndex-1+slides.length)%slides.length; showSlide(slideIndex);}
+function startSlideshowAuto(){slideshowInterval=setInterval(nextSlide,5000);}
 
 // ==== HEARTS ====
 function spawnHearts(){
@@ -222,11 +216,12 @@ setInterval(()=>{
 let text="Love I wish you a very happy birthday and I thank god and your parents for bringing this beautiful soul into this not so beautiful world where you keep on making people smile by your sheer presence.Angel I want you to know that you are a fantastic human beings with your own beautiful flaws which you carry very elegantly and they make you the perfect Angel for me.I wish this birthday of yours brings a lot of happiness and clarity in your life and may your celebration get grander every year.I hope as we grow older our bond gets stronger and deeper with every passing day and year , may i get to be with you and celebrate my last breath with you by my side and afcourse never let you run out of lip glosses";
 let i=0;
 function typeLetter(){
-if(i<text.length){
-document.getElementById("letter").innerHTML+=text.charAt(i);
-i++;
-setTimeout(typeLetter,40);
-}}
+  if(i<text.length){
+    document.getElementById("letter").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typeLetter,40);
+  }
+}
 typeLetter();
 </script>
 </body>
