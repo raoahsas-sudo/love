@@ -69,7 +69,7 @@ input{padding:12px;border-radius:10px;border:none;margin-top:15px;background:#1c
 
 <div class="page" id="page2">
   <h1>This idiot loves you more ❤️</h1>
-  <button onclick="nextPage(); startMusicAndFire();">Show Surprise</button>
+  <button onclick="nextPage(); startMusicAndFire(); startSlideshowAuto();">Show Surprise</button>
 </div>
 
 <div class="page" id="page3">
@@ -156,6 +156,7 @@ spawnHearts();
 // ==== SLIDESHOW ====
 let slideIndex=0;
 let slides=document.querySelectorAll(".slide");
+let slideshowInterval;
 
 function showSlide(i){
   slides.forEach(s=>s.classList.remove("active"));
@@ -170,6 +171,11 @@ function nextSlide(){
 function prevSlide(){
   slideIndex=(slideIndex-1+slides.length)%slides.length;
   showSlide(slideIndex);
+}
+
+// Auto-play slideshow
+function startSlideshowAuto(){
+  slideshowInterval = setInterval(nextSlide,5000); // change slide every 5 sec
 }
 
 // ==== HEARTS ====
